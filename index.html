@@ -1,47 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>3 Minute Vibration Timer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Walk-Jog Vibration Timer</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
-      padding-top: 50px;
+      padding: 50px;
     }
     button {
       padding: 15px 30px;
       font-size: 18px;
+      margin: 10px;
+    }
+    #status {
+      font-size: 20px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Vibration Timer</h1>
+  <h1>Walk & Jog Timer</h1>
   <button onclick="startTimer()">Start</button>
   <button onclick="stopTimer()">Stop</button>
+  <div id="status">Press Start</div>
 
   <script>
-    let intervalId;
+    let isWalking = true;
+    let timerId = null;
+
+    function vibrate() {
+      if ('vibrate' in navigator) {
+        navigator.vibrate(500);
+      }
+    }
 
     function startTimer() {
-      if (intervalId) return;
+      if (timerId) return;
 
-      alert("Timer started. Your phone will vibrate every 3 minutes.");
+      const status = document.getElementById("status");
 
-      intervalId = setInterval(() => {
-        if ("vibrate" in navigator) {
-          navigator.vibrate([500]);
-        } else {
-          alert("Vibration not supported on this device.");
-        }
-      }, 3000); // 3 minutes
+      function walkPhase() {
+        isWalking = true;
+        status.textContent = "🚶 Walk for 3 minutes...";
+        vibrate();
+
+        timerId = setTimeout(() => {
+          jogPhase();
+        }, 180000); // 3 minutes
+      }
+
+      function jogPhase() {
+        isWalking = false;
+        status.textContent = "🏃 Jog for 40 seconds...";
+        vibrate();
+
+        timerId = setTimeout(() => {
+          walkPhase();
+        }, 40000); // 40 seconds
+      }
+
+      walkPhase(); // start with walking
     }
 
     function stopTimer() {
-      clearInterval(intervalId);
-      intervalId = null;
-      alert("Timer stopped.");
+      clearTimeout(timerId);
+      timerId = null;
+      document.getElementById("status").textContent = "Timer stopped.";
     }
   </script>
 </body>
