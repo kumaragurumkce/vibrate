@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Walk-Jog Vibration Timer</title>
+  <title>Walk-Jog Triple Vibration Timer</title>
   <style>
     body {
       font-family: sans-serif;
@@ -31,9 +31,9 @@
     let isWalking = true;
     let timerId = null;
 
-    function vibrate() {
+    function tripleVibrate() {
       if ('vibrate' in navigator) {
-        navigator.vibrate(500);
+        navigator.vibrate([300, 200, 300, 200, 300]);
       }
     }
 
@@ -45,7 +45,7 @@
       function walkPhase() {
         isWalking = true;
         status.textContent = "🚶 Walk for 3 minutes...";
-        vibrate();
+        tripleVibrate();
 
         timerId = setTimeout(() => {
           jogPhase();
@@ -55,7 +55,7 @@
       function jogPhase() {
         isWalking = false;
         status.textContent = "🏃 Jog for 40 seconds...";
-        vibrate();
+        tripleVibrate();
 
         timerId = setTimeout(() => {
           walkPhase();
