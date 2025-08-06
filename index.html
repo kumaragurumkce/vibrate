@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3 Minute Vibration Timer</title>
+</head>
+<body>
+  <h1>Vibration Timer</h1>
+  <button onclick="startTimer()">Start</button>
+
+  <script>
+    let intervalId;
+
+    function startTimer() {
+      if (intervalId) return; // prevent multiple intervals
+
+      alert("Timer started. Your phone will vibrate every 3 minutes.");
+
+      intervalId = setInterval(() => {
+        // Check if vibration is supported
+        if ("vibrate" in navigator) {
+          navigator.vibrate([500]); // vibrate for 500ms
+        } else {
+          alert("Vibration not supported on this device.");
+        }
+      }, 1800); // 3 minutes = 180,000 ms
+    }
+  </script>
+</body>
+</html>
